@@ -1,3 +1,14 @@
+"""
+Future Improvements:
+    - clear button to watermark another image
+    - saving the file with relevant name
+    - choosing watermark position
+    - changing watermark transparency
+    - code optimization
+    ...
+"""
+
+
 from PIL import Image, ImageTk, ImageDraw
 # im = Image.open("photo.jpg")
 
@@ -5,7 +16,6 @@ from tkinter import Tk, Button, Label, filedialog, Text
 
 
 # WORKING WITH [GUI]
-
 # function in order to open file explorer window and get filename
 def openfile():
     filename = filedialog.askopenfilename(initialdir='/',
@@ -25,23 +35,27 @@ def open_img():
     img_name = openfile()
     img = Image.open(img_name)
     img = img.resize((400, 400))
+    # creating different var because we will need img var assigned to Image Class of PIL
     photo_img = ImageTk.PhotoImage(img)
 
     panel = Label(window, image=photo_img)
     panel.image = photo_img
     panel.grid(row=4)
-    get_input.grid(row=6)
+
+    # after image is shown on the window, these widgets will appear
     input_label.grid(row=5)
+    get_input.grid(row=6)
     button_watermark.grid(row=7)
 
 
+# WATERMARKING LOGIC
 # put watermark on the image
 def watermark(photo):
     # setting up PILs ImageDraw to put a text on the photo
     draw = ImageDraw.Draw(photo)
     draw.text((5, 5), get_input.get(1.0, 'end-1c'))
     img.save('watermarked.jpg')
-    print("success")
+    print("successfully saved as watermarked.jpg")
 
 
 # setting up the window
