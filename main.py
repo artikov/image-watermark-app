@@ -1,4 +1,4 @@
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageDraw
 # im = Image.open("photo.jpg")
 
 from tkinter import Tk, Button, Label, filedialog, Text
@@ -16,23 +16,32 @@ def openfile():
     return filename
 
 
+img = None
+
+
 # open an image using filename
 def open_img():
+    global img
     img_name = openfile()
     img = Image.open(img_name)
     img = img.resize((400, 400))
-    img = ImageTk.PhotoImage(img)
+    photo_img = ImageTk.PhotoImage(img)
 
-    panel = Label(window, image=img)
-    panel.image = img
+    panel = Label(window, image=photo_img)
+    panel.image = photo_img
     panel.grid(row=4)
     get_input.grid(row=6)
     input_label.grid(row=5)
+    button_watermark.grid(row=7)
 
 
 # put watermark on the image
-def watermark():
-    pass
+def watermark(photo):
+    # setting up PILs ImageDraw to put a text on the photo
+    draw = ImageDraw.Draw(photo)
+    draw.text((5, 5), get_input.get(1.0, 'end-1c'))
+    img.save('watermarked.jpg')
+    print("success")
 
 
 # setting up the window
@@ -63,7 +72,7 @@ get_input = Text(window,
                  height=1,
                  width=30)
 
-button_watermark = Button(window, text='Watermark', command=watermark)
+button_watermark = Button(window, text='Watermark', command=lambda: watermark(img))
 
 
 window.mainloop()
